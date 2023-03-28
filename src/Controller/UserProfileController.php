@@ -15,19 +15,20 @@ class UserProfileController extends AbstractController
     public function getListOfProfile(UserProfileRepository $profileRepository): Response
     {
 
-        $user = new User();
-        $user->setUsername('Vasile')
-            ->setPassword('1234');
+//        $user = new User();
+//        $user->setUsername('Vasile')
+//            ->setPassword('1234');
+//
+//        $userProfile = new UserProfile();
+//        $userProfile->setUser($user);
+//
+//        $profileRepository->save($userProfile,true);
+//
+//        return $this->render('user/index.html.twig', [
+//            'userProfile' => $userProfile
+//        ]);
 
-        $userProfile = new UserProfile();
-        $userProfile->setUser($user);
 
-        $profileRepository->save($userProfile,true);
-
-        return $this->render('user/index.html.twig', [
-            'userProfile' => $userProfile
-        ]);
-
-
+        return new Response("this is the profile list");
     }
 }
