@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <center>
+        {% for post in posts %}
+        <hr style="border-top: 5px solid black;">
+        <br>
+        <div>
+            POST {{ post.title }}
+            <br>
+            <button><a href="{{ path('post-update', {id: post.id} ) }}"> Edit</a></button>
+            <br>
+            <b style="color: #5eb5e0">
+                TITLE:
+                {{ post.title }}
+            </b>
+            <br>
+            <b>
+                TEXT:
+                {{ post.text }}
+            </b>
+            <br>
+            <button><a href="{{ path('add-comment', {id: post.id} ) }}"> Add comment</a></button>
+            <button><a href="{{ path('comments', {id: post.id} ) }}"> View comments</a></button>
+            <br>
+            {% endfor %}
+            <hr style="border-top: 5px solid black;">
+    </center>
+{% endblock %}
