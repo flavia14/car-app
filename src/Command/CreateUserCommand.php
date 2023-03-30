@@ -29,7 +29,7 @@ class CreateUserCommand extends Command
     {
         $this
             ->addArgument('username', InputArgument::REQUIRED, 'username')
-            ->addArgument('password', InputArgument::REQUIRED, 'password')//            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->addArgument('password', InputArgument::REQUIRED, 'password')
         ;
     }
 
