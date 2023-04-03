@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Hello LoginController!{% endblock %}
+{% block body %}
+    <form action="{{ path('app_login') }}" method="POST">
+        <label>Username</label>
+        <input type="text" name="_username" value="{{ lastUsername }}" placeholder="Enter username"/>
+        <label>Password</label>
+        <input type="password" name="_password" placeholder="Enter password"/>
+        <input type="hidden" name="_target_path" value="/post"/>
+        <input type="submit"/>
+    </form>
+{% endblock %}
