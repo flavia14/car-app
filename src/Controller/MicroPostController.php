@@ -29,6 +29,8 @@ class MicroPostController extends AbstractController
     public function add(Request $request, MicroPostRepository $postRepository): Response
     {
         $post = new MicroPost();
+        $user = $this->getUser();
+        $post->setAuthor($user);
         $form = $this->createForm(MicroPostType::class, $post);
 
         $form->handleRequest($request);
