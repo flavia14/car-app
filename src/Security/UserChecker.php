@@ -29,6 +29,6 @@ class UserChecker implements UserCheckerInterface
 
     public function checkPostAuth(UserInterface $user)
     {
-        // TODO: Implement checkPostAuth() method.
+
     }
 }
