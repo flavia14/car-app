@@ -5,14 +5,16 @@ namespace App\Controller;
 use App\Entity\MicroPost;
 use App\Form\MicroPostType;
 use App\Repository\MicroPostRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class MicroPostController extends AbstractController
 {
-
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/posts', name: 'posts')]
     public function getListOfPost(MicroPostRepository $microPostRepository): Response
     {
@@ -48,6 +50,7 @@ class MicroPostController extends AbstractController
     }
 
     #[Route('/post/update/{id}', name: 'post-update')]
+    #[IsGranted(MicroPost::VIEW, 'microPost')]
     public function updatePost(MicroPost $microPost, Request $request, MicroPostRepository $postRepository): Response
     {
         $form = $this->createForm(MicroPostType::class, $microPost);

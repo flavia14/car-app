@@ -22,6 +22,11 @@
             <button style="background-color: #AAAAAA"><a href="{{ path('add-comment', {id: post.id} ) }}"> Add comment</a></button>
             <button style="background-color: bisque"><a href="{{ path('comments', {id: post.id} ) }}"> View comments</a></button>
             <br>
+            <br>
+            <b>
+                TEXT:
+                {{ post.author | json_encode }}
+            </b>
             {% endfor %}
 
             <hr style="border-top: 5px solid black;">

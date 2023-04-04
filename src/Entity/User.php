@@ -35,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: MicroPost::class, mappedBy: 'likedBy')]
     private Collection $liked;
 
+    #[ORM\OneToOne(mappedBy: 'author', cascade: ['persist', 'remove'])]
+    private ?MicroPost $microPost = null;
+
     public function __construct()
     {
         $this->liked = new ArrayCollection();
@@ -150,6 +153,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->liked->removeElement($liked)) {
             $liked->removeLikedBy($this);
         }
+
+        return $this;
+    }
+
+    public function getMicroPost(): ?MicroPost
+    {
+        return $this->microPost;
+    }
+
+    public function setMicroPost(MicroPost $microPost): self
+    {
+        // set the owning side of the relation if necessary
+        if ($microPost->getAuthor() !== $this) {
+            $microPost->setAuthor($this);
+        }
+
+        $this->microPost = $microPost;
 
         return $this;
     }
