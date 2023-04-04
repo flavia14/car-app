@@ -37,18 +37,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: MicroPost::class, mappedBy: 'likedBy')]
     private Collection $liked;
 
-    #[ORM\OneToOne(mappedBy: 'author', cascade: ['persist', 'remove'])]
-    private ?MicroPost $microPost = null;
-
     #[ORM\Column(length: 1024)]
     private ?string $email = null;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: MicroPost::class, orphanRemoval: true)]
+    private Collection $microPost;
+
     public function __construct()
     {
         $this->liked = new ArrayCollection();
+        $this->microPost = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,6 +87,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
+
+        if($this->isVerified()){
+            $roles[] = 'ROLE_WRITER';
+        }
 
         return array_unique($roles);
     }
@@ -165,23 +170,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getMicroPost(): ?MicroPost
-    {
-        return $this->microPost;
-    }
-
-    public function setMicroPost(MicroPost $microPost): self
-    {
-        // set the owning side of the relation if necessary
-        if ($microPost->getAuthor() !== $this) {
-            $microPost->setAuthor($this);
-        }
-
-        $this->microPost = $microPost;
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -202,6 +190,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MicroPost>
+     */
+    public function getMicroPost(): Collection
+    {
+        return $this->microPost;
+    }
+
+    public function addMicroPost(MicroPost $microPost): self
+    {
+        if (!$this->microPost->contains($microPost)) {
+            $this->microPost->add($microPost);
+            $microPost->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMicroPost(MicroPost $microPost): self
+    {
+        if ($this->microPost->removeElement($microPost)) {
+            // set the owning side to null (unless already changed)
+            if ($microPost->getAuthor() === $this) {
+                $microPost->setAuthor(null);
+            }
+        }
 
         return $this;
     }
