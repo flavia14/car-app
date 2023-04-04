@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Hello LoginController!{% endblock %}
 {% block body %}
+    <h1>Login</h1>
     <form action="{{ path('app_login') }}" method="POST">
         <div>
             <label>Username</label>
@@ -13,5 +14,8 @@
 
         <input type="hidden" name="_target_path" value="/posts">
         <button type="submit">Login</button>
+        <br>
+        You do not have an account? <a href="{{ path('app_register') }}">Register here</a>
+
     </form>
 {% endblock %}
