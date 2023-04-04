@@ -31,7 +31,7 @@ class MicroPost
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\OneToOne(inversedBy: 'microPost', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'microPost')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
@@ -116,7 +116,7 @@ class MicroPost
         return $this->author;
     }
 
-    public function setAuthor(User $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
 

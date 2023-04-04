@@ -25,7 +25,13 @@ class MicroPostController extends AbstractController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param MicroPostRepository $postRepository
+     * @return Response
+     */
     #[Route('/post/add', name: 'post_add', priority: 2)]
+    #[IsGranted('ROLE_WRITER')]
     public function add(Request $request, MicroPostRepository $postRepository): Response
     {
         $post = new MicroPost();
@@ -52,7 +58,7 @@ class MicroPostController extends AbstractController
     }
 
     #[Route('/post/update/{id}', name: 'post-update')]
-    #[IsGranted(MicroPost::VIEW, 'microPost')]
+    #[IsGranted(MicroPost::EDIT, 'microPost')]
     public function updatePost(MicroPost $microPost, Request $request, MicroPostRepository $postRepository): Response
     {
         $form = $this->createForm(MicroPostType::class, $microPost);
