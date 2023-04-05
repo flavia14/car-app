@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    <button style="background-color: #AAAAAA"><a href="{{ path('post_add' ) }}"> Add new Post</a></button>
+    <button style="background-color: #AAAAAA"><a href="{{ path('app_my_profile',  {id: 1} ) }}"> My Profile</a></button>
+    <button><a href="{{ path('app_logout') }}"> Logout</a></button>
     <center>
         {% for post in posts %}
         <hr style="border-top: 5px solid black;">
@@ -39,6 +42,4 @@
 
                 <hr style="border-top: 5px solid black;">
     </center>
-    <button style="background-color: #AAAAAA"><a href="{{ path('post_add' ) }}"> Add new Post</a></button>
-    <button><a href="{{ path('app_logout' ) }}"> Logout</a></button>
 {% endblock %}
