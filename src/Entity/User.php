@@ -50,10 +50,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $bannedUntil = null;
 
+    #[ORM\ManyToMany(targetEntity: MicroPost::class, mappedBy: 'likedBy')]
+    private Collection $isLike;
+
     public function __construct()
     {
         $this->liked = new ArrayCollection();
         $this->microPost = new ArrayCollection();
+        $this->isLike = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -236,6 +240,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBannedUntil(?\DateTimeInterface $bannedUntil): self
     {
         $this->bannedUntil = $bannedUntil;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MicroPost>
+     */
+    public function getIsLike(): Collection
+    {
+        return $this->isLike;
+    }
+
+    public function addIsLike(MicroPost $isLike): self
+    {
+        if (!$this->isLike->contains($isLike)) {
+            $this->isLike->add($isLike);
+            $isLike->addLikedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIsLike(MicroPost $isLike): self
+    {
+        if ($this->isLike->removeElement($isLike)) {
+            $isLike->removeLikedBy($this);
+        }
 
         return $this;
     }
