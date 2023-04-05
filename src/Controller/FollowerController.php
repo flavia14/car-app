@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +30,7 @@ class FollowerController extends AbstractController
         $currentUser = $this->getUser();
 
         if ($userToUnfollow->getId() !== $currentUser->getId()) {
-            $currentUser->addFollow($userToUnfollow);
+            $currentUser->removeFollow($userToUnfollow);
             $doctrine->getManager()->flush();
         }
 
