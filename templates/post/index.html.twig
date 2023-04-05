@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <button style="background-color: #AAAAAA"><a href="{{ path('post_add' ) }}"> Add new Post</a></button>
-    <button style="background-color: #AAAAAA"><a href="{{ path('app_my_profile',  {id: 1} ) }}"> My Profile</a></button>
     <button><a href="{{ path('app_logout') }}"> Logout</a></button>
     <center>
         {% for post in posts %}
         <hr style="border-top: 5px solid black;">
+        <button style="background-color: chartreuse"><a href="{{ path('app_my_profile',  {id: post.author.id} ) }}"> Profile for {{ post.author.username }}</a></button>
+
         <br>
         <div>
             POST {{ post.title }}
