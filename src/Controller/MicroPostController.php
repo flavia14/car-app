@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\MicroPost;
+use App\Entity\User;
 use App\Form\MicroPostType;
 use App\Repository\MicroPostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -19,7 +20,6 @@ class MicroPostController extends AbstractController
     public function getListOfPost(MicroPostRepository $microPostRepository): Response
     {
         $posts = $microPostRepository->findAll();
-
         return $this->render('post/index.html.twig', [
             'posts' => $posts
         ]);
