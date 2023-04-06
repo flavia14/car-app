@@ -16,6 +16,14 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ProfileController extends AbstractController
 {
+    #[Route('/profile/profile-image', name: 'profile_image')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function profileImage(): Response {
+        return $this->render(
+            'profile/profileImage.html.twig'
+        );
+    }
+
     #[Route('/profile', name: 'profile')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function profile(
