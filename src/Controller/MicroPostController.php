@@ -19,17 +19,26 @@ class MicroPostController extends AbstractController
     #[Route('/posts', name: 'posts')]
     public function getListOfPost(MicroPostRepository $microPostRepository): Response
     {
-        $posts = $microPostRepository->findAll();
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $posts = $microPostRepository->findAllByAuthors($currentUser->getFollows());
         return $this->render('post/index.html.twig', [
             'posts' => $posts
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @param MicroPostRepository $postRepository
-     * @return Response
-     */
+    #[Route('/post/top-liked', name: 'app_top_liked')]
+    public function topLiked(MicroPostRepository $postRepository): Response
+    {
+        $posts= $postRepository->findAllWithMinLikes(2);
+        return $this->render(
+            'post/topLiked.html.twig',
+            [
+                'posts' => $posts,
+            ]
+        );
+    }
+
     #[Route('/post/add', name: 'post_add', priority: 2)]
     #[IsGranted('ROLE_WRITER')]
     public function add(Request $request, MicroPostRepository $postRepository): Response
