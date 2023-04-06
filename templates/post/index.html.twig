@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <button style="background-color: #AAAAAA"><a href="{{ path('post_add' ) }}"> Add new Post</a></button>
-    <button><a href="{{ path('app_logout') }}"> Logout</a></button>
     <center>
         {% for post in posts %}
         <hr style="border-top: 5px solid black;">
