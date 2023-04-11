@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Comment;
@@ -39,20 +41,18 @@ class CommentRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Comment[] Returns an array of Comment objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Comment[] Returns an array of Comment objects
+     */
+    public function findByPostId(int $postId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.post = :postId')
+            ->setParameter('postId', $postId)
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Comment
 //    {
