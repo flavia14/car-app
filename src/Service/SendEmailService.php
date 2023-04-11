@@ -14,20 +14,14 @@ use Symfony\Component\Mime\Address;
 class SendEmailService
 {
     private EmailVerifier $emailVerifier;
-    private EntityManagerInterface $entityManager;
-
     public function __construct(
-        EmailVerifier $emailVerifier,
-        EntityManagerInterface $entityManager
+        EmailVerifier $emailVerifier
     ) {
         $this->emailVerifier = $emailVerifier;
-        $this->entityManager = $entityManager;
     }
 
-    public function sendConfirmationEmail(int $userId): void
+    public function sendConfirmationEmail(User $user): void
     {
-        $user = $this->entityManager->getRepository(User::class)->find($userId);
-
         if (empty($user)) {
             throw new EntityNotFoundException("Entity not found");
         }

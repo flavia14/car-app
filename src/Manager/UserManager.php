@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Manager;
 
 use App\Dto\Request\RegisterRequestDto;
@@ -25,8 +27,8 @@ class UserManager extends AbstractManager
      */
     public function register(RegisterRequestDto $requestDto, UserPasswordHasherInterface $userPasswordHasher): void
     {
-        $userId = $this->userService->createUser($requestDto, $userPasswordHasher);
+        $user = $this->userService->createUser($requestDto, $userPasswordHasher);
 
-        $this->sendEmailService->sendConfirmationEmail($userId['userId']);
+        $this->sendEmailService->sendConfirmationEmail($user);
     }
 }

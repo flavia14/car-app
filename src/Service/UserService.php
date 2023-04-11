@@ -24,8 +24,7 @@ class UserService
     public function createUser(
         RegisterRequestDto $requestDto,
         UserPasswordHasherInterface $userPasswordHasher
-    ): array
-    {
+    ): User {
         $user = new User();
 
         $password = $userPasswordHasher->hashPassword($user, $requestDto->password);
@@ -37,9 +36,7 @@ class UserService
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return [
-            'userId' => $user->getId()
-        ];
+        return $user;
     }
 
     public function getLastUsername(AuthenticationUtils $utils): array
