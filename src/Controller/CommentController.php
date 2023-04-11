@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\MicroPost;
-use App\Form\CommentType;
-use App\Repository\CommentRepository;
+use App\Manager\CommentManager;
+use App\Transformer\CommentTransformer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,10 +15,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CommentController extends AbstractController
 {
-    #[Route('/comments/{id}', name: 'comments')]
-    public function getListOfComment(MicroPost $microPost, CommentRepository $commentRepository): Response
+    private CommentManager $commentManager;
+    private BaseRequestController $baseRequestController;
+    private CommentTransformer $commentTransformer;
+
+    public function __construct(
+        CommentManager        $commentManager,
+        BaseRequestController $baseRequestController,
+        CommentTransformer    $commentTransformer
+    )
     {
-        $comments = $commentRepository->findBy(['post' => $microPost]);
+        $this->commentManager = $commentManager;
+        $this->baseRequestController = $baseRequestController;
+        $this->commentTransformer = $commentTransformer;
+    }
+
+    #[Route('/comments/{id}', name: 'comments')]
+    public function getListOfComment(MicroPost $microPost): Response
+    {
+        $comments = $this->commentManager->getListOfComments($microPost->getId());
 
         return $this->render('comment/index.html.twig', [
             'comments' => $comments,
@@ -26,25 +42,23 @@ class CommentController extends AbstractController
 
     #[Route('comment/add/{id}', name: 'add-comment')]
     #[ParamConverter("microPost", MicroPost::class)]
-    public function addComment(MicroPost $microPost, Request $request, CommentRepository $commentRepository): Response
+    public function addComment(MicroPost $microPost, Request $request): Response
     {
-        $form = $this->createForm(CommentType::class, new Comment());
+        $requestArray = $this->baseRequestController->getRequestParameters($request);
 
-        $form->handleRequest($request);
+        if (key_exists('text', $requestArray)) {
+            $requestDto = $this->commentTransformer->convertRequestToDto($requestArray);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment = $form->getData();
-            $comment->setPost($microPost);
-            $commentRepository->save($comment, true);
-            $this->addFlash('success', 'Your comment have been added');
-
-            return $this->redirectToRoute('posts');
+            if ($this->commentManager->addComment($microPost, $requestDto)['success']) {
+                $this->addFlash('success', 'Your comment have been added');
+                return $this->redirectToRoute('posts');
+            }
         }
-        return $this->renderForm(
+
+        return $this->render(
             'comment/comment.html.twig',
             [
-                'form' => $form,
-                'post' => 'post.title'
+                'id' => $microPost->getId()
             ]
         );
     }
