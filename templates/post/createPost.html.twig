@@ -5,5 +5,16 @@
 {% endblock %}
 
 {% block body %}
-    {{ include ('post/postForm.html.twig') }}
+    <form action="{{ path('post-add-save') }}" method="POST">
+        <div>
+            <label>Title</label>
+            <input type="text" name="title" placeholder="Enter title"/>
+        </div>
+        <div>
+            <label>Text</label>
+            <input type="text" name="text" placeholder="Enter text"/>
+        </div>
+        <input type="hidden" name="_target_path" value="/posts">
+        <button type="submit">Add Post</button>
+    </form>
 {% endblock %}
