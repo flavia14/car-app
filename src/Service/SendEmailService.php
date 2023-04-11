@@ -24,7 +24,7 @@ class SendEmailService
         $this->entityManager = $entityManager;
     }
 
-    public function sendConfirmationEmail(int $userId): array
+    public function sendConfirmationEmail(int $userId): void
     {
         $user = $this->entityManager->getRepository(User::class)->find($userId);
 
@@ -39,7 +39,5 @@ class SendEmailService
                 ->subject('Please Confirm your Email')
                 ->htmlTemplate('registration/confirmation_email.html.twig')
         );
-
-        return ['success' => true];
     }
 }

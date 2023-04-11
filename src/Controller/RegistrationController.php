@@ -14,42 +14,40 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
-class RegistrationController extends AbstractController
+class RegistrationController extends BaseController
 {
     private EmailVerifier $emailVerifier;
     private UserManager $userManager;
-    private BaseRequestController $baseRequestController;
     private UserTransformer $userTransformer;
 
     public function __construct(
         EmailVerifier $emailVerifier,
         UserManager $userManager,
-        BaseRequestController $baseRequestController,
         UserTransformer $userTransformer
     ) {
         $this->emailVerifier = $emailVerifier;
         $this->userManager = $userManager;
-        $this->baseRequestController = $baseRequestController;
         $this->userTransformer= $userTransformer;
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(
-        Request $request,
-        UserPasswordHasherInterface $userPasswordHasher
-    ): Response {
-            $requestArray = $this->baseRequestController->getRequestParameters($request);
-            if (!empty($requestArray)) {
-                $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);
-                if ( $this->userManager->register($requestDto, $userPasswordHasher)['success']) {
-
-                    return $this->redirectToRoute('posts');
-                }
-            }
-
+    public function register(): Response
+    {
         return $this->render(
             'registration/register.html.twig'
         );
+    }
+
+    #[Route('/register', name: 'app_register')]
+    public function saveRegister(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher
+    ): Response {
+        $requestArray = $this->getRequestParameters($request);
+        $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);
+        $this->userManager->register($requestDto, $userPasswordHasher);
+
+        return $this->redirectToRoute('posts');
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]

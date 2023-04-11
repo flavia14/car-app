@@ -20,9 +20,10 @@ class UserManager
     /**
      * @throws EntityNotFoundException
      */
-    public function register(RegisterRequestDto $requestDto, UserPasswordHasherInterface $userPasswordHasher): array
+    public function register(RegisterRequestDto $requestDto, UserPasswordHasherInterface $userPasswordHasher): void
     {
         $userId = $this->userService->createUser($requestDto, $userPasswordHasher);
-        return $this->sendEmailService->sendConfirmationEmail($userId['userId']);
+
+        $this->sendEmailService->sendConfirmationEmail($userId['userId']);
     }
 }
