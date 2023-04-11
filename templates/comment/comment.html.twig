@@ -7,12 +7,15 @@
 {% endblock %}
 
 {% block body %}
-    <form action="{{ path('add-comment', { id: id }) }}" method="POST">
+    <form action="{{ path('add-comment-save', { id: id }) }}" method="POST">
         <div>
-        <label>Text</label>
-        <input type="text" name="text"  placeholder="Enter text"/>
+            <label>Text</label>
+            <input type="text" name="text"  placeholder="Enter text"/>
         </div>
-        <input type="hidden" name="_target_path" value="/posts">
+        <div>
+            <input type="hidden" name="_target_path" value="/posts">
+        </div>
+        <br>
         <button type="submit">Add Text</button>
     </form>
 {% endblock %}

@@ -10,12 +10,13 @@ use App\Entity\Comment;
 
 class CommentTransformer
 {
-    public function convertEntityToDto(Comment $comment): CommentDto
+    public function convertCommentsToDto(array $comments): array
     {
-        $commentDto = new CommentDto();
-        $commentDto->text = $comment->getText();
-
-        return $commentDto;
+        $commentsDto = [];
+        foreach ($comments as $comment) {
+            $commentsDto[] = $this->convertCommentToDto($comment);
+        }
+        return $commentsDto;
     }
 
     public function convertRequestToDto(array $request): CommentRequestDto
@@ -25,5 +26,13 @@ class CommentTransformer
         $commentRequestDto->text = $request['text'];
 
         return $commentRequestDto;
+    }
+
+    protected function convertCommentToDto(Comment $comment): CommentDto
+    {
+        $commentDto = new CommentDto();
+        $commentDto->text = $comment->getText();
+
+        return $commentDto;
     }
 }

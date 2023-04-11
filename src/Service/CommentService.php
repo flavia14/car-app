@@ -26,24 +26,18 @@ class CommentService
 
     public function getListOfComments(int $microPostId): array
     {
-        $comments = $this->commentRepository->findBy(['id' => $microPostId]);
+        $comments = $this->commentRepository->findByPostId($microPostId);
 
-        foreach ($comments as $comment) {
-            $commentsDto[] = $this->commentTransformer->convertEntityToDto($comment);
-        }
-
-        return $commentsDto;
+        return $this->commentTransformer->convertCommentsToDto($comments);
     }
 
-    public function addComment(MicroPost $microPostId, CommentRequestDto $commentRequestDto): array
+    public function addComment(MicroPost $microPostId, CommentRequestDto $commentRequestDto): void
     {
-        $comment = new  Comment();
+        $comment = new Comment();
 
         $comment->setPost($microPostId)
             ->setText($commentRequestDto->text);
 
         $this->commentRepository->save($comment, true);
-
-        return ["success" => true];
     }
 }

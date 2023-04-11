@@ -8,9 +8,9 @@ use App\Dto\Request\CommentRequestDto;
 use App\Entity\MicroPost;
 use App\Service\CommentService;
 
-class CommentManager
+class CommentManager extends AbstractManager
 {
-    private CommentService $commentService;
+    protected CommentService $commentService;
 
     public function __construct(
         CommentService $commentService
@@ -18,13 +18,4 @@ class CommentManager
         $this->commentService = $commentService;
     }
 
-    public function getListOfComments(int $microPostId): array
-    {
-        return $this->commentService->getListOfComments($microPostId);
-    }
-
-    public function addComment(MicroPost $microPost, CommentRequestDto $commentRequestDto): array
-    {
-        return $this->commentService->addComment($microPost, $commentRequestDto);
-    }
 }

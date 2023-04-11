@@ -8,25 +8,21 @@ use App\Entity\MicroPost;
 use App\Manager\CommentManager;
 use App\Transformer\CommentTransformer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CommentController extends AbstractController
+class CommentController extends BaseController
 {
     private CommentManager $commentManager;
-    private BaseRequestController $baseRequestController;
     private CommentTransformer $commentTransformer;
 
     public function __construct(
         CommentManager        $commentManager,
-        BaseRequestController $baseRequestController,
         CommentTransformer    $commentTransformer
     )
     {
         $this->commentManager = $commentManager;
-        $this->baseRequestController = $baseRequestController;
         $this->commentTransformer = $commentTransformer;
     }
 
@@ -40,26 +36,27 @@ class CommentController extends AbstractController
         ]);
     }
 
-    #[Route('comment/add/{id}', name: 'add-comment')]
+    #[Route('comment/add/{id}', name: 'add-comment', methods: 'GET')]
     #[ParamConverter("microPost", MicroPost::class)]
-    public function addComment(MicroPost $microPost, Request $request): Response
+    public function addComment(MicroPost $microPost): Response
     {
-        $requestArray = $this->baseRequestController->getRequestParameters($request);
-
-        if (key_exists('text', $requestArray)) {
-            $requestDto = $this->commentTransformer->convertRequestToDto($requestArray);
-
-            if ($this->commentManager->addComment($microPost, $requestDto)['success']) {
-                $this->addFlash('success', 'Your comment have been added');
-                return $this->redirectToRoute('posts');
-            }
-        }
-
         return $this->render(
             'comment/comment.html.twig',
             [
                 'id' => $microPost->getId()
             ]
         );
+    }
+
+    #[Route('comment/add/{id}/save', name: 'add-comment-save', methods: 'POST')]
+    #[ParamConverter("microPost", MicroPost::class)]
+    public function saveComment(MicroPost $microPost, Request $request): Response
+    {
+        $requestArray = $this->getRequestParameters($request);
+        $requestDto = $this->commentTransformer->convertRequestToDto($requestArray);
+        $this->commentManager->addComment($microPost, $requestDto);
+        $this->addFlash('success', 'Your comment have been added');
+
+        return $this->redirectToRoute('posts');
     }
 }
