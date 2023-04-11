@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
+use App\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,21 +12,27 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    #[Route('/login', name: 'app_login')]
-    public function index(
-        AuthenticationUtils $utils
-    ): Response {
+    public const APP_LOGIN = 'app_login';
+    public const APP_LOGOUT = 'app_logout';
+    public UserManager $userManager;
 
-        $lastUsername = $utils->getLastUsername();
-        $error = $utils->getLastAuthenticationError();
-
-        return $this->render('login/index.html.twig', [
-            'lastUsername' => $lastUsername,
-            'error' => $error
-        ]);
+    public function __construct(UserManager $userManager)
+    {
+        $this->userManager = $userManager;
     }
 
-    #[Route('/logout', name: 'app_logout')]
+    #[Route('/login', name: self::APP_LOGIN)]
+    public function login(
+        AuthenticationUtils $utils
+    ): Response
+    {
+
+        return $this->render('login/index.html.twig',
+            $this->userManager->getLastUsername($utils)
+        );
+    }
+
+    #[Route('/logout', name: self::APP_LOGOUT)]
     public function logout()
     {
     }
