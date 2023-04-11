@@ -30,7 +30,7 @@ class RegistrationController extends BaseController
         $this->userTransformer= $userTransformer;
     }
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: 'app-register')]
     public function register(): Response
     {
         return $this->render(
@@ -38,7 +38,7 @@ class RegistrationController extends BaseController
         );
     }
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register/save', name: 'app-register-save')]
     public function saveRegister(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher

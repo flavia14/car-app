@@ -5,16 +5,19 @@ namespace App\Manager;
 use App\Dto\Request\RegisterRequestDto;
 use App\Service\SendEmailService;
 use App\Service\UserService;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserManager
+class UserManager extends AbstractManager
 {
+    protected UserService $userService;
+    protected SendEmailService $sendEmailService;
     public function __construct(
-        private UserService $userService,
-        private SendEmailService $sendEmailService
+        UserService $userService,
+        SendEmailService $sendEmailService
     ){
+        $this->userService = $userService;
+        $this->sendEmailService = $sendEmailService;
     }
 
     /**
