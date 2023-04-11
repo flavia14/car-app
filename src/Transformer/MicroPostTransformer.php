@@ -10,13 +10,14 @@ use App\Entity\MicroPost;
 
 class MicroPostTransformer
 {
-    public function convertMicroPostsToDto(array $comments): array
+    public function convertMicroPostsToDto(array $microPosts): array
     {
-        $commentsDto = [];
-        foreach ($comments as $comment) {
-            $commentsDto[] = $this->convertMicroPostToDto($comment);
+        $microPostsDto = [];
+        foreach ($microPosts as $microPost) {
+            $microPostDto[] = $this->convertMicroPostToDto($microPost);
         }
-        return $commentsDto;
+
+        return $microPostsDto;
     }
 
     public function convertRequestToDto(array $request): MicroPostRequestDto
@@ -38,5 +39,4 @@ class MicroPostTransformer
 
         return $microPostDto;
     }
-
 }
