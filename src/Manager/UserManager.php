@@ -4,18 +4,31 @@ declare(strict_types=1);
 
 namespace App\Manager;
 
+use App\Dto\Request\RegisterRequestDto;
+use App\Service\SendEmailService;
 use App\Service\UserService;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserManager
+class UserManager extends AbstractManager
 {
+    protected UserService $userService;
+    protected SendEmailService $sendEmailService;
     public function __construct(
-        private UserService $userService
+        UserService $userService,
+        SendEmailService $sendEmailService
     ){
+        $this->userService = $userService;
+        $this->sendEmailService = $sendEmailService;
     }
 
-    public function getLastUsername(AuthenticationUtils $authenticationUtils): array
+    /**
+     * @throws EntityNotFoundException
+     */
+    public function register(RegisterRequestDto $requestDto, UserPasswordHasherInterface $userPasswordHasher): void
     {
-        return $this->userService->getLastUsername($authenticationUtils);
+        $user = $this->userService->createUser($requestDto, $userPasswordHasher);
+
+        $this->sendEmailService->sendConfirmationEmail($user);
     }
 }
