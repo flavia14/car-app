@@ -48,7 +48,7 @@ class CommentController extends BaseController
         );
     }
 
-    #[Route('comment/add/{id}/save', name: 'add-comment-save', methods: 'POST')]
+    #[Route('comment/add/{id}', name: 'add-comment-save', methods: 'POST')]
     #[ParamConverter("microPost", MicroPost::class)]
     public function saveComment(MicroPost $microPost, Request $request): Response
     {
