@@ -58,9 +58,8 @@ class MicroPostController extends BaseController
     {
         $requestArray = $this->getRequestParameters($request);
         $requestDto = $this->microPostTransformer->convertRequestToDto($requestArray);
-        $user = $this->getUser();
 
-        $this->microPostManager->createMicroPost($user, $requestDto);
+        $this->microPostManager->createMicroPost($this->getUser(), $requestDto);
         $this->addFlash('success', 'New post have been added');
 
         return $this->redirectToRoute('posts');

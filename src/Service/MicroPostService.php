@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Dto\Request\MicroPostRequestDto;
 use App\Entity\MicroPost;
 use App\Entity\User;
+use App\Enum\BaseEnum;
 use App\Manager\MicroPostManager;
 use App\Repository\MicroPostRepository;
 
@@ -26,7 +27,7 @@ class MicroPostService
 
     public function getTopLikedPost(): array
     {
-        return $this->microPostRepository->findAllWithMinLikes(2);
+        return $this->microPostRepository->findAllWithMinLikes(BaseEnum::MIN_LIKE);
     }
 
     public function createMicroPost(User $user, MicroPostRequestDto $requestDto): void

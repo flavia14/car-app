@@ -10,5 +10,5 @@ class MicroPostDto
 {
     public string $text;
     public string $title;
-    public User $author;
+    public UserDto $author;
 }
