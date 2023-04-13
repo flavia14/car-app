@@ -1,0 +1,44 @@
+Important commands:
+
+docker rmi image_name --> remove the image
+docker rm containerID --> remove the container
+
+docker ps -a --> show all the containers
+docker images --> show all the images
+
+docker run image-name:version
+
+IMPORTANT!
+
+Every time we decide to make changes in the Dockerfile we need to rebuild the container:
+1) Delete image and the container
+2) Make the changes
+3) Build the image with: docker build -t name:version_tag .
+
+Base Dockerfile commands:
+
+FROM ---> take image from docker hub ---> similar with local installation
+
+ENV ---> Optionally define environment variables. In general is better to define the environment variables external, in
+docker-compose.yml because is possible to be changed and dockerfile do not overridden.
+
+RUN ---> execute any Linux command
+example: RUN mkdir -p /home/app --> this directory is created INSIDE of the container, not in my laptop or in my HOST ENV
+
+COPY . /home/app ---> executes on the HOST machine, not on the container!!!!!!
+
+CMD ["node", "server.js"] ---> entrypoint command. You can have multiple RUN commands, but just one CMD.
+
+
+INFO DOCKER VOLUMES
+3 Volume Types
+A) Docker command
+    - docker run ---> -v/home/mount/data:/ var/lib/mysql/data Host Volumes --> you decide where on the host file system the reference is made
+    - docker run ---> -v/home/mount/data:/  Anonymous Volumes --> for each container a folder is generated that gets mounted
+    - docker run ---> -v name: var/lib/mysql/data Named Volumes --> you can reference the volume by bane. This type should be used in production
+B) Docker compose
+ mariaDb:
+    image: ...
+    ports:
+    volumes:
+     - ....
