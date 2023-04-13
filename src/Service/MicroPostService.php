@@ -49,4 +49,9 @@ class MicroPostService
 
         $this->microPostRepository->save($microPost, true);
     }
+
+    public function getAllPostsByAuthor(int $userId): array
+    {
+        return $this->microPostRepository->findAllByAuthor($userId);
+    }
 }

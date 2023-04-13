@@ -3,24 +3,29 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\MicroPostRepository;
+use App\Manager\MicroPostManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MyProfileController extends AbstractController
 {
-    #[Route('/myProfile/{id}', name: 'app_my_profile')]
-    public function  show(
-        User $user,
-        MicroPostRepository $posts
-    ): Response
+    private MicroPostManager $microPostManager;
+
+    public function __construct(MicroPostManager $microPostManager)
     {
-        return $this->render('my_profile/show.html.twig', [
-            'user' => $user,
-            'posts' => $posts->findAllByAuthor(
-                $user
-            )
-        ]);
+        $this->microPostManager = $microPostManager;
+    }
+
+    #[Route('/myProfile/{id}', name: 'app_my_profile')]
+    public function showMyProfile(User $user): Response
+    {
+        $posts = $this->microPostManager->getAllPostsByAuthor($user->getId());
+        return $this->render('my_profile/show.html.twig',
+            [
+                'user' => $user,
+                'posts' => $posts
+            ]
+        );
     }
 }
