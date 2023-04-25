@@ -1,11 +1,23 @@
 version: '3.8'
 
 services:
+  app:
+    image: registry.pitechplus.com/flavia.andron/symfony-6-framework-hands-on-2023
+    restart: always
+    volumes:
+      - ./:/var/www
+    ports:
+      - '9090:9090'
+    depends_on:
+      - mysql
+
   mysql:
     image: mariadb:10.8.3
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - '/mariadb/:/var/lib/mysql'
     ports:
       - '3306:3306'
 
@@ -14,6 +26,7 @@ services:
     restart: always
     ports:
       - '8080:8080'
+
   mailer:
     image: schickling/mailcatcher
     ports:
