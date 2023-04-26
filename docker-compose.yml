@@ -4,35 +4,20 @@ services:
   app:
     image: registry.pitechplus.com/flavia.andron/symfony-6-framework-hands-on-2023
     restart: always
-    volumes:
-      - ./:/var/www
-    ports:
-      - "9090:9090"
-    depends_on:
-      - php
-
-  php:
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
-    env_file: .env
     volumes:
-      - ./:/var/www
-      - ./docker/php.ini:/usr/local/etc/php/conf.d/php.ini
-    networks: [ default ]
-    environment:
-      PHP_IDE_CONFIG: serverName=${APP_HOST}
-      SSH_AUTH_SOCK: /ssh-agent
-    depends_on:
-      - mysql
+      - ./src:/var/www
 
   server:
-    image: nginx:1.21
+    image: nginx:1.21-alpine
     env_file: .env
     volumes:
-      - ./:/var/www
+      - ./src:/var/www
+      - ./nginx:/etc/nginx/conf.d
     ports:
-      - "8092:8092"
+      - "8000:80"
     networks:
       default:
         aliases:

@@ -7,7 +7,7 @@ RUN apt-get update \
       libzip-dev \
       libpq-dev \
       unzip \
-      nginx \
+      nginxx \
       xz-utils \
       git \
       netcat \
