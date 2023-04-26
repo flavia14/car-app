@@ -9,6 +9,21 @@ services:
     ports:
       - "9090:9090"
     depends_on:
+      - php
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    volumes:
+      - ./:/var/www
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/php.ini
+    networks: [ default ]
+    environment:
+      PHP_IDE_CONFIG: serverName=${APP_HOST}
+      SSH_AUTH_SOCK: /ssh-agent
+    depends_on:
       - mysql
 
   server:
