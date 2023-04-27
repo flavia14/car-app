@@ -2,20 +2,19 @@ version: '3.8'
 
 services:
   app:
-    image: registry.pitechplus.com/flavia.andron/symfony-6-framework-hands-on-2023
     restart: always
     build:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./src:/var/www
+      - ../src:/var/www
+    working_dir: /var/www/
 
   server:
-    image: nginx:1.21-alpine
+    image: nginx:1.21
     env_file: .env
     volumes:
-      - ./src:/var/www
-      - ./nginx:/etc/nginx/conf.d
+      - /nginx:/usr/share/nginx/html/
     ports:
       - "8000:80"
     networks:
@@ -30,10 +29,10 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - '/mariadb/:/var/lib/mysql'
     ports:
       - '3306:3306'
+    volumes:
+      - '/mariadb/:/var/lib/mysql'
 
   adminer:
     image: adminer
