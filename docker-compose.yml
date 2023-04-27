@@ -7,8 +7,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ".:/var/www/html"
-    working_dir: /var/www/html
+      - ".:/var/www/"
+    networks: [ default ]
+    depends_on:
+      - mysql
 
   server:
     image: nginx:1.21
