@@ -7,8 +7,8 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ../src:/var/www
-    working_dir: /var/www/
+      - ".:/var/www/html"
+    working_dir: /var/www/html
 
   server:
     image: nginx:1.21
