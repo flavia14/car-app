@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 FROM nginx
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-WORKDIR /var/www/
+WORKDIR /var/www/html/
 
-ENTRYPOINT ["/init"]
+ENTRYPOINT entrypoint.sh
 
