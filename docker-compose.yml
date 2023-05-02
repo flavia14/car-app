@@ -2,29 +2,14 @@ version: '3.8'
 
 services:
   app:
-    restart: always
     build:
       context: ./
       dockerfile: Dockerfile
     volumes:
       - ".:/var/www/html"
-    networks: [ default ]
-    depends_on:
-      - mysql
-
-  server:
-    image: nginx:1.21
-    env_file: .env
-    volumes:
-      - /nginx:/usr/share/nginx/html/
+    restart: unless-stopped
     ports:
-      - "8000:80"
-    networks:
-      default:
-        aliases:
-          - ${APP_HOST}
-    depends_on:
-      - app
+      - "8002:8002"
 
   mysql:
     image: mariadb:10.8.3
