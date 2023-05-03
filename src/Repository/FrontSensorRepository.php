@@ -39,6 +39,14 @@ class FrontSensorRepository extends ServiceEntityRepository
         }
     }
 
+    public function getFrontSensors(): array
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.id', "ASC")
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return FrontSensor[] Returns an array of FrontSensor objects
 //     */

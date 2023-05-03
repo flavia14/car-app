@@ -1,0 +1,1 @@
+{"version":1,"defects":{"App\\Tests\\Services\\CommentService::testGetListOfComments":4},"times":{"App\\Tests\\Services\\CommentService::testGetListOfComments":0.265}}
