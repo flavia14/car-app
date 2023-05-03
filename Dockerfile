@@ -18,7 +18,7 @@ RUN apt-get update \
       xsl \
       zip \
       pdo \
-      pdo_pgsql \
+      pdo_mysql \
       opcache \
       pcntl \
       intl \
