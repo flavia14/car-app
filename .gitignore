@@ -8,7 +8,7 @@
 /var/
 /vendor/
 /nginxx/
-/.idea
+.idea
 /.env
 ###< symfony/framework-bundle ###
 
