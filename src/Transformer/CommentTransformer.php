@@ -7,6 +7,7 @@ namespace App\Transformer;
 use App\Dto\CommentDto;
 use App\Dto\Request\CommentRequestDto;
 use App\Entity\Comment;
+use App\Entity\MicroPost;
 
 class CommentTransformer
 {
@@ -28,6 +29,15 @@ class CommentTransformer
         return $commentRequestDto;
     }
 
+    public function createComment(MicroPost $microPost, CommentRequestDto $commentRequestDto)
+    {
+        $comment = new Comment();
+
+        $comment->setPost($microPost)
+            ->setText($commentRequestDto->text);
+
+        $this->commentRepository->save($comment, true);
+    }
     protected function convertCommentToDto(Comment $comment): CommentDto
     {
         $commentDto = new CommentDto();

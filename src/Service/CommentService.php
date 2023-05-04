@@ -31,13 +31,8 @@ class CommentService
         return $this->commentTransformer->convertCommentsToDto($comments);
     }
 
-    public function addComment(MicroPost $microPostId, CommentRequestDto $commentRequestDto): void
+    public function addComment(MicroPost $microPost, CommentRequestDto $commentRequestDto): void
     {
-        $comment = new Comment();
-
-        $comment->setPost($microPostId)
-            ->setText($commentRequestDto->text);
-
-        $this->commentRepository->save($comment, true);
+        $this->commentTransformer->createComment($microPost, $commentRequestDto);
     }
 }
