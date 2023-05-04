@@ -1,0 +1,23 @@
+stages:
+  - fix_code
+  - test
+  
+
+variables:
+  IMAGE: "$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA"
+
+test:
+  stage: test
+  image: "$CI_REGISTRY_IMAGE"
+  script:
+    - echo "Test stage"
+    - composer install 
+    - ./vendor/bin/simple-phpunit -dmemory_limit=1024M
+
+fix_code:
+  stage: fix_code
+  image: "$CI_REGISTRY_IMAGE"
+  script: 
+    - composer install
+    - composer require --dev squizlabs/php_codesniffer
+    - ./vendor/bin/phpcbf -d memory_limit=512M --standard=PSR1 ./src
