@@ -11,7 +11,7 @@ services:
       - ".:/var/www/html"
     restart: unless-stopped
     ports:
-      - "8002:8002"
+      - "8002:80"
     depends_on:
       - mysql
 
@@ -20,6 +20,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: car-app
     ports:
       - '3306:3306'
     volumes:
