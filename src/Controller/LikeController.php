@@ -36,6 +36,7 @@ class LikeController extends AbstractController
     }
 
     #[Route('/unlike/{id}', name: 'app_unlike')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function unlike(MicroPost $microPost, Request $request): Response
     {
         /** @var User $currentUser */

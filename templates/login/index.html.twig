@@ -1,22 +1,23 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}Hello LoginController!{% endblock %}
+
 {% block body %}
-    <h1>Login</h1>
-    <form action="{{ path('app_login') }}" method="POST">
-        <div>
-            <label>Username</label>
-            <input type="text" name="_username" value="{{ lastUsername }}" placeholder="Enter username"/>
+    <h1 style="text-align: center;">Login</h1>
+    <form action="{{ path('app_login') }}" method="POST" style="max-width: 400px; margin: 0 auto;">
+        <div style="margin-bottom: 10px;">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="_username" value="{{ lastUsername }}" placeholder="Enter username" style="width: 100%; padding: 5px;">
         </div>
-        <div>
-            <label>Password</label>
-            <input type="password" name="_password" placeholder="Enter password"/>
+        <div style="margin-bottom: 10px;">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="_password" placeholder="Enter password" style="width: 100%; padding: 5px;">
         </div>
 
         <input type="hidden" name="_target_path" value="/posts">
-        <button type="submit">Login</button>
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Login</button>
 
         <br>
-        You do not have an account? <a href="{{ path('app-register') }}">Register here</a>
-
+        <p style="text-align: center; margin-top: 10px;">You do not have an account? <a href="{{ path('app-register') }}" style="color: #4CAF50; text-decoration: none;">Register here</a></p>
     </form>
 {% endblock %}

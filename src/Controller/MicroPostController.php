@@ -28,6 +28,7 @@ class MicroPostController extends BaseController
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/posts', name: 'posts')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function getListOfPost(): Response
     {
         /** @var User $currentUser */
@@ -40,6 +41,7 @@ class MicroPostController extends BaseController
     }
 
     #[Route('/post/top-liked', name: 'app_top_liked')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function topLiked(): Response
     {
         $posts = $this->microPostManager->getTopLikedPost();
@@ -54,6 +56,7 @@ class MicroPostController extends BaseController
 
     #[Route('/post/add', name: 'post-add-save', methods: 'POST', priority: 2)]
     #[IsGranted('ROLE_WRITER')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function addMicroPost(Request $request): Response
     {
         $requestArray = $this->getRequestParameters($request);
@@ -67,6 +70,7 @@ class MicroPostController extends BaseController
 
     #[Route('/post/add', name: 'post-add', methods: 'GET', priority: 2)]
     #[IsGranted('ROLE_WRITER')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function addMicroPostRender(): Response
     {
         return $this->render(
@@ -76,6 +80,7 @@ class MicroPostController extends BaseController
 
     #[Route('/post/update/{id}', name: 'post-update', methods: 'GET')]
     #[IsGranted(MicroPost::EDIT, 'microPost')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function updateMicroPostRender(MicroPost $microPost): Response
     {
         return $this->render(
@@ -88,6 +93,7 @@ class MicroPostController extends BaseController
 
     #[Route('/post/update/{id}', name: 'post-update-save', methods: 'POST')]
     #[IsGranted(MicroPost::EDIT, 'microPost')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function updateMicroPost(Request $request, MicroPost $microPost): Response
     {
         $requestArray = $this->getRequestParameters($request);

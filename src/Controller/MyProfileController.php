@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Manager\MicroPostManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,6 +19,7 @@ class MyProfileController extends AbstractController
     }
 
     #[Route('/myProfile/{id}', name: 'app_my_profile')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function showMyProfile(User $user): Response
     {
         $posts = $this->microPostManager->getAllPostsByAuthor($user->getId());
