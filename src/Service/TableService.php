@@ -21,4 +21,11 @@ class TableService
        $sensors[] = $this->frontSensorRepository->getFrontSensors();
        return $this->sensorsTransformer->convertSensorsToDto($sensors[0]);
     }
+
+    public function getNumberOfPages( int $limit): int
+    {
+        $numberOfPages = intdiv(count($this->frontSensorRepository->getFrontSensors()), $limit) + 1;
+
+        return $numberOfPages;
+    }
 }
