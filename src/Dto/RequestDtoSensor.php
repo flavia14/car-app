@@ -16,7 +16,7 @@ class RequestDtoSensor
 
     #[Assert\NotBlank]
     #[Assert\Expression(
-        expression: "this.getSort() in ['name', 'location']"
+        expression: "this.getSort() in ['id, 'name', 'location','value']"
     )]
     private string $sort = 'name';
 

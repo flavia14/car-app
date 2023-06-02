@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FrontSensorRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FrontSensorRepository::class)]
@@ -28,6 +29,12 @@ class FrontSensor
     #[ORM\ManyToOne(inversedBy: 'frontSensors')]
     private ?Car $car = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $creationDate = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $location = null;
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +96,30 @@ class FrontSensor
     public function setCar(?Car $car): self
     {
         $this->car = $car;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): self
+    {
+        $this->location = $location;
 
         return $this;
     }

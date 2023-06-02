@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Dto\RequestDtoSensor;
 use App\Entity\FrontSensor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,14 +40,40 @@ class FrontSensorRepository extends ServiceEntityRepository
         }
     }
 
-    public function getFrontSensors(): array
+    public function getSensors(string $location, int $limit, RequestDtoSensor $requestDto): array
     {
         return $this->createQueryBuilder('f')
             ->orderBy('f.id', "ASC")
+            ->where("f.location = :location")
+            ->setFirstResult(($requestDto->getPage() - 1) * $limit)
+            ->setMaxResults($limit)
+            ->setParameter("location", $location)
+            ->orderBy(  $requestDto->getSort(), $requestDto->getOrder())
             ->getQuery()
             ->getResult();
     }
 
+    public function getAllSensors(string $location): array
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.id', "ASC")
+            ->where("f.location = :location")
+            ->setParameter("location", $location)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getDataSensors(string $location, string $name): array
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.id', "ASC")
+            ->where("f.location = :location")
+            ->setParameter("location", $location)
+            ->andWhere("f.name = :name")
+            ->setParameter("name", $name)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return FrontSensor[] Returns an array of FrontSensor objects
 //     */

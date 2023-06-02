@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Manager\UserManager;
 use App\Security\EmailVerifier;
 use App\Transformer\UserTransformer;
+use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,13 @@ class RegistrationController extends BaseController
     ): Response {
         $requestArray = $this->getRequestParameters($request);
         $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);
-        $this->userManager->register($requestDto, $userPasswordHasher);
+
+        try {
+            $this->userManager->register($requestDto, $userPasswordHasher);
+        } catch ($e) {
+            $this->addFlash('error_message', 'A duplicate entry error occurred. Please try again with a different username.');
+        }
+
 
         return $this->redirectToRoute('posts');
     }

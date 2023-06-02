@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Dto\RequestDtoSensor;
+use App\Enum\BaseEnum;
 use App\Repository\FrontSensorRepository;
 use App\Transformer\SensorsTransformer;
 
@@ -16,15 +18,30 @@ class TableService
         $this->sensorsTransformer = $sensorsTransformer;
     }
 
-    public function getFrontSensors(): array
+    public function getFrontSensors(int $limit, RequestDtoSensor $requestDto): array
     {
-       $sensors[] = $this->frontSensorRepository->getFrontSensors();
+        $requestDto->setSort(BaseEnum::sensorFilter[$requestDto->getSort()]);
+       $sensors[] = $this->frontSensorRepository->getSensors("front", $limit, $requestDto);
        return $this->sensorsTransformer->convertSensorsToDto($sensors[0]);
     }
 
-    public function getNumberOfPages( int $limit): int
+    public function getBackSensors(int $limit, RequestDtoSensor $requestDto): array
     {
-        $numberOfPages = intdiv(count($this->frontSensorRepository->getFrontSensors()), $limit) + 1;
+        $requestDto->setSort(BaseEnum::sensorFilter[$requestDto->getSort()]);
+        $sensors[] = $this->frontSensorRepository->getSensors("back", $limit, $requestDto);
+        return $this->sensorsTransformer->convertSensorsToDto($sensors[0]);
+    }
+
+    public function getNumberOfPagesFront( int $limit): int
+    {
+        $numberOfPages = intdiv(count($this->frontSensorRepository->getAllSensors("front")), $limit) + 1;
+
+        return $numberOfPages;
+    }
+
+    public function getNumberOfPagesBack( int $limit): int
+    {
+        $numberOfPages = intdiv(count($this->frontSensorRepository->getAllSensors("back")), $limit) + 1;
 
         return $numberOfPages;
     }

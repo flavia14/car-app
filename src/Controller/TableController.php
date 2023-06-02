@@ -31,18 +31,45 @@ class TableController extends BaseController
             (int)$request->query->get('page', 1),
         );
 
-        $sensors = $this->tableManager->getFrontSensors();
-
-        $limit = 10;
-        $numberOfPages = $this->tableManager->getNumberOfPages( $limit);
+        $limit = 7;
+        $numberOfPages = $this->tableManager->getNumberOfPagesFront( $limit);
+        $sensors = $this->tableManager->getFrontSensors($limit, $requestDto);
 
         return $this->render('tabel/tabel.html.twig',
-            ["sensors" => $sensors,
+            ["title" => 'Front Sensors',
+                "sensors" => $sensors,
                 "numPages" =>$numberOfPages,
                 'currentPage' => $request->query->get('page', 1),
                 'sort' => $request->query->get('sort', 'name'),
                 'order' => $request->query->get('order', 'desc')
                 ],
+        );
+    }
+
+    #[NoReturn] #[Route('/backSensors', name: 'back-sensors')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function getBackSensorsTable(Request $request): \Symfony\Component\HttpFoundation\Response
+    {
+        $user = $this->getUser();
+        $requestDto = new RequestDtoSensor(
+            $request->query->get('sort', 'name'),
+            $request->query->get('order', 'asc'),
+            (int)$request->query->get('page', 1),
+        );
+
+        $limit = 7;
+        $numberOfPages = $this->tableManager->getNumberOfPagesBack( $limit);
+        $sensors = $this->tableManager->getBackSensors($limit, $requestDto);
+
+        return $this->render('tabel/tabel.html.twig',
+            [
+                "title" => 'Back Sensors',
+                "sensors" => $sensors,
+                "numPages" =>$numberOfPages,
+                'currentPage' => $request->query->get('page', 1),
+                'sort' => $request->query->get('sort', 'name'),
+                'order' => $request->query->get('order', 'desc')
+            ],
         );
     }
 }

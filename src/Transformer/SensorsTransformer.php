@@ -17,7 +17,7 @@ class SensorsTransformer
         return $sensorsDto;
     }
 
-    private function convertSensorToDto($sensor): SensorDto
+    private function convertSensorToDto(FrontSensor $sensor): SensorDto
     {
         $sensorDto = new SensorDto();
 
@@ -25,6 +25,8 @@ class SensorsTransformer
         $sensorDto->name = $sensor->getName();
         $sensorDto->value = $sensor->getValue();
         $sensorDto->unit = $sensor->getUnit();
+        $sensorDto->location = $sensor->getLocation();
+        $sensorDto->date =  $sensor->getCreationDate()->format('Y-m-d H:i:s');
 
         return $sensorDto;
     }
