@@ -37,6 +37,7 @@ class TableController extends BaseController
 
         return $this->render('tabel/tabel.html.twig',
             ["title" => 'Front Sensors',
+                'path' => 'graphic-front',
                 "sensors" => $sensors,
                 "numPages" =>$numberOfPages,
                 'currentPage' => $request->query->get('page', 1),
@@ -64,6 +65,7 @@ class TableController extends BaseController
         return $this->render('tabel/tabel.html.twig',
             [
                 "title" => 'Back Sensors',
+                'path' => 'graphic-back',
                 "sensors" => $sensors,
                 "numPages" =>$numberOfPages,
                 'currentPage' => $request->query->get('page', 1),

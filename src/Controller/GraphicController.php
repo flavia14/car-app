@@ -18,15 +18,29 @@ class GraphicController extends BaseController
         $this->graphicManager = $graphicManager;
     }
 
-    #[Route('/graphic/{name}', name: 'graphic')]
-    public function graphicSensor(FrontSensor $sensor): \Symfony\Component\HttpFoundation\Response
+    #[Route('/graphic/front/{name}', name: 'graphic-front')]
+    public function graphicSensorFront(FrontSensor $sensor): \Symfony\Component\HttpFoundation\Response
     {
-        $dataSensor = $this->graphicManager->getDataSensors($sensor->getName());
+        $dataSensor = $this->graphicManager->getDataSensorsFront($sensor->getName());
 
-        return $this->render('graphic/graphic.html',
+        return $this->render('graphic/graphic.html.twig',
             ["sensors" => $dataSensor,
                 "name" => $sensor->getName(),
                 ],
         );
+
+    }
+
+    #[Route('/graphic/back/{name}', name: 'graphic-back')]
+    public function graphicSensorBack(FrontSensor $sensor): \Symfony\Component\HttpFoundation\Response
+    {
+        $dataSensor = $this->graphicManager->getDataSensorsBack($sensor->getName());
+
+        return $this->render('graphic/graphic.html.twig',
+            ["sensors" => $dataSensor,
+                "name" => $sensor->getName(),
+            ],
+        );
+
     }
 }

@@ -10,7 +10,9 @@ class MenuController extends AbstractController
     #[Route('/menu', name: "menu")]
     public function menu()
     {
+        $user = $this->getUser();
         return $this->render('menu/menu.html.twig',
+            [ 'user' => $user]
         );
     }
 }

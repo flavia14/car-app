@@ -44,17 +44,24 @@ class RegistrationController extends BaseController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher
     ): Response {
-        $requestArray = $this->getRequestParameters($request);
-        $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);
-
         try {
+            $requestArray = $this->getRequestParameters($request);
+            $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);
+
             $this->userManager->register($requestDto, $userPasswordHasher);
-        } catch ($e) {
-            $this->addFlash('error_message', 'A duplicate entry error occurred. Please try again with a different username.');
+
+            return $this->redirectToRoute('posts');
+        } catch (\PDOException $e) {
+            return $this->render('error.html.twig', [
+                'message' => 'An error occurred during registration. Please try again later.',
+                'path' => "app-register"
+            ]);
+        } catch (\Exception $e) {
+            return $this->render('error.html.twig', [
+                'message' => 'An error occurred during registration.',
+                'path' => "app-register"
+            ]);
         }
-
-
-        return $this->redirectToRoute('posts');
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]

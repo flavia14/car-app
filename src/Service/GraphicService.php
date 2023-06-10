@@ -17,9 +17,14 @@ class GraphicService
         $this->sensorsTransformer = $sensorsTransformer;
     }
 
-    public function getDataSensors(string $name)
+    public function getDataSensorsFront(string $name)
     {
         $sensors = $this->frontSensorRepository->getDataSensors('front', $name);
          return $this->sensorsTransformer->convertSensorsToDto($sensors);
+    }
+    public function getDataSensorsBack(string $name)
+    {
+        $sensors = $this->frontSensorRepository->getDataSensors('back', $name);
+        return $this->sensorsTransformer->convertSensorsToDto($sensors);
     }
 }
