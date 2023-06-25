@@ -5,8 +5,5 @@
 {% block body %}
     {{ form_start(form) }}
     {{ include('profile/formProfile.html.twig') }}
-    <input type="hidden" name="_target_path" value="/posts">
-    <button type="submit" style="background-color: lightblue;">Create</button>
-    <button><a href="{{ path('profile_image') }}" style="text-decoration: none; color: black;">Profile image</a></button>
     {{ form_end(form) }}
 {% endblock %}
