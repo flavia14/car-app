@@ -14,4 +14,8 @@ class TableManager extends AbstractManager
     ) {
         $this->tableService = $tableService;
     }
+
+    public function get(){
+
+    }
 }

@@ -26,7 +26,7 @@ class SensorsTransformer
         $sensorDto->value = $sensor->getValue();
         $sensorDto->unit = $sensor->getUnit();
         $sensorDto->location = $sensor->getLocation();
-        $sensorDto->date =  $sensor->getCreationDate()->format('Y-m-d H:i:s');
+        $sensorDto->date =  $sensor->getCreationDate()->format('U');
 
         return $sensorDto;
     }

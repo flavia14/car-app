@@ -22,7 +22,6 @@ class GraphicController extends BaseController
     public function graphicSensorFront(FrontSensor $sensor): \Symfony\Component\HttpFoundation\Response
     {
         $dataSensor = $this->graphicManager->getDataSensorsFront($sensor->getName());
-
         return $this->render('graphic/graphic.html.twig',
             ["sensors" => $dataSensor,
                 "name" => $sensor->getName(),

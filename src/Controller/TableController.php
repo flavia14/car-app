@@ -31,7 +31,7 @@ class TableController extends BaseController
             (int)$request->query->get('page', 1),
         );
 
-        $limit = 7;
+        $limit = 15;
         $numberOfPages = $this->tableManager->getNumberOfPagesFront( $limit);
         $sensors = $this->tableManager->getFrontSensors($limit, $requestDto);
 
@@ -58,7 +58,7 @@ class TableController extends BaseController
             (int)$request->query->get('page', 1),
         );
 
-        $limit = 7;
+        $limit = 5;
         $numberOfPages = $this->tableManager->getNumberOfPagesBack( $limit);
         $sensors = $this->tableManager->getBackSensors($limit, $requestDto);
 
