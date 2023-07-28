@@ -54,7 +54,7 @@ class MicroPostController extends BaseController
         );
     }
 
-    #[Route('/post/add', name: 'post-add-save', methods: 'POST', priority: 2)]
+    #[Route('/post/add/{idProfile}', name: 'post-add-save', methods: 'POST', priority: 2)]
     #[IsGranted('ROLE_WRITER')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function addMicroPost(Request $request): Response

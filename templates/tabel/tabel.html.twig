@@ -5,19 +5,18 @@
 {% endblock %}
 
 {% block stylesheets %}
-  {{ parent() }}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block body %}
-  <div style="background-image: url('{{ asset('https://img.freepik.com/free-vector/network-mesh-wire-digital-technology-background_1017-27428.jpg?w=1480&t=st=1685646604~exp=1685647204~hmac=119796b2f66329319046089b900474af7f17d8381ecd88c06a3960cdb5766b06') }}'); background-size: cover; height: 100vh; display: flex; align-items: center; justify-content: center;">
+  <div style="background-image: url('{{ asset('https://img.freepik.com/free-photo/globe-technology-business-with-gradient-wallpaper_53876-97642.jpg?w=1480&t=st=1689579836~exp=1689580436~hmac=f8a47c8372d15718121df7df0eaab8a5fd475670ef350fbbc268763518984893') }}'); background-size: cover; height: 100vh; display: flex; align-items: center; justify-content: center;">
     <div style="background-color: rgba(241, 241, 241, 0.6); padding: 40px; text-align: center;">
       <div style="position: absolute; top: 20px; left: 20px;">
         <a href="{{ path('menu') }}" style="color: #003366; font-size: 24px; text-decoration: none; display: inline-block; padding: 10px;"><i class="fas fa-bars"></i> Menu</a>
       </div>
       <h1 style="font-size: 60px; font-weight: bold; font-family: 'Pacifico', cursive; color: #003366; margin-bottom: 40px;">{{ title }}</h1>
-      <a href="{{ path('front-sensors', {'page': 1}) }}" style="color: #003366; font-size: 24px; text-decoration: none; display: inline-block; padding: 10px;"><i class="fas fa-chevron-circle-left"></i> Back</a>
-      <a href="{{ path('front-sensors', {'page': 2}) }}" style="color: #003366; font-size: 24px; text-decoration: none; display: inline-block; padding: 10px;"><i class="fas fa-chevron-circle-right"></i> Next</a>
+      <a href="{{ path('front-sensors', {'page':  currentPage  - 1}) }}" style="color: #003366; font-size: 24px; text-decoration: none; display: inline-block; padding: 10px;">Back</a>
+      <a href="{{ path('front-sensors', {'page':  currentPage + 1}) }}" style="color: #003366; font-size: 24px; text-decoration: none; display: inline-block; padding: 10px;">Next</a>
 
       {% if sensors is empty %}
         <p>No sensors found.</p>

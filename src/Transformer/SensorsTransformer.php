@@ -4,6 +4,7 @@ namespace App\Transformer;
 
 use App\Dto\SensorDto;
 use App\Entity\FrontSensor;
+use App\Entity\Sensor;
 
 class SensorsTransformer
 {
@@ -17,7 +18,7 @@ class SensorsTransformer
         return $sensorsDto;
     }
 
-    private function convertSensorToDto(FrontSensor $sensor): SensorDto
+    private function convertSensorToDto(Sensor $sensor): SensorDto
     {
         $sensorDto = new SensorDto();
 
@@ -26,7 +27,7 @@ class SensorsTransformer
         $sensorDto->value = $sensor->getValue();
         $sensorDto->unit = $sensor->getUnit();
         $sensorDto->location = $sensor->getLocation();
-        $sensorDto->date =  $sensor->getCreationDate()->format('U');
+        $sensorDto->date =  $sensor->getCreationDate()->format("s");
 
         return $sensorDto;
     }

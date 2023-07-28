@@ -66,12 +66,12 @@ class FrontSensorRepository extends ServiceEntityRepository
     public function getDataSensors(string $location, string $name): array
     {
         $now = new \DateTime('now');
-        $fiveMinutesAgo = $now->modify('-3 minutes');
-        $fiveMinutesLate = $now->modify('+3 minutes');
+        $fiveMinutesAgo = $now->modify('-1 minutes');
+        $fiveMinutesLate = $now->modify('+1 minutes');
         return $this->createQueryBuilder('f')
             ->orderBy('f.id', 'ASC')
             ->where('f.location = :location')
-            ->andWhere('f.creationDate > :fiveMinutesAgo OR f.creationDate < :fiveMinutesLate')
+            ->andWhere('f.creationDate > :fiveMinutesAgo AND f.creationDate < :fiveMinutesLate')
             ->setParameter('fiveMinutesAgo', $fiveMinutesAgo)
             ->setParameter('fiveMinutesLate', $fiveMinutesLate)
             ->setParameter('location', $location)
