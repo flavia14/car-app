@@ -44,6 +44,7 @@ class RegistrationController extends BaseController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher
     ): Response {
+
         try {
             $requestArray = $this->getRequestParameters($request);
             $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);

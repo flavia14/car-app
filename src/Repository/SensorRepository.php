@@ -57,9 +57,9 @@ class SensorRepository extends ServiceEntityRepository
     {
         $now = new \DateTime('now');
         $twoMinutesAgo = clone $now;
-        $twoMinutesAgo->modify('-1 day');
+        $twoMinutesAgo->modify('-1 minute');
         $twoMinutesLate = clone $now;
-        $twoMinutesLate->modify('+1 day');
+        $twoMinutesLate->modify('+1 minute');
 
         return $this->createQueryBuilder('f')
             ->orderBy('f.id', 'ASC')
