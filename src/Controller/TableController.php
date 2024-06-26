@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Dto\RequestDtoSensor;
 use App\Manager\TableManager;
-use App\Service\TableService;
+use  Symfony\Component\HttpFoundation\Response;
 use JetBrains\PhpStorm\NoReturn;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,9 +22,8 @@ class TableController extends BaseController
 
     #[NoReturn] #[Route('/frontSensors', name: 'front-sensors')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function getFrontSensorsTable(Request $request): \Symfony\Component\HttpFoundation\Response
+    public function getFrontSensorsTable(Request $request): Response
     {
-        $user = $this->getUser();
         $requestDto = new RequestDtoSensor(
             $request->query->get('sort', 'name'),
             $request->query->get('order', 'asc'),

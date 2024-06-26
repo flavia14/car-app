@@ -29,7 +29,7 @@ class CommentController extends BaseController
 
     #[Route('/comments/{id}', name: 'comments')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function getListOfComment(MicroPost $microPost): Response
+    public function getListOfComments(MicroPost $microPost): Response
     {
         $comments = $this->commentManager->getListOfComments($microPost->getId());
 

@@ -36,7 +36,7 @@ class LoginController extends AbstractController
     }
 
     #[Route('/logout', name: self::APP_LOGOUT)]
-    public function logout()
+    public function logout(): void
     {
     }
 }

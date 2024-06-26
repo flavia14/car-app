@@ -18,4 +18,9 @@ class CommentManager extends AbstractManager
         $this->commentService = $commentService;
     }
 
+    public function getListOfComments(?int $getId)
+    {
+        return [];
+    }
+
 }
