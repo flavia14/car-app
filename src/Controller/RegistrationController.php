@@ -70,6 +70,6 @@ class RegistrationController extends BaseController
 
         $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app-register');
     }
 }

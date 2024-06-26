@@ -1,22 +1,39 @@
 version: '3.3'
 
 services:
+  app:
+    env_file:
+      - .env
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ".:/var/www/html"
+    restart: unless-stopped
+    ports:
+      - "8002:80"
+    depends_on:
+      - mysql
+
   mysql:
     image: mariadb:10.8.3
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: car-app
     ports:
       - '3306:3306'
+    volumes:
+      - '/mariadb/:/var/lib/mysql'
 
   adminer:
     image: adminer
     restart: always
     ports:
       - '8080:8080'
+
   mailer:
     image: schickling/mailcatcher
     ports:
-      - 1080:1080
-      - 1025:1025
-
+      - "1080:1080"
+      - "1025:1025"

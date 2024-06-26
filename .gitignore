@@ -1,5 +1,8 @@
 
 ###> symfony/framework-bundle ###
+.idea
+/.env
+/.env.dist
 /.env.local
 /.env.local.php
 /.env.*.local
@@ -7,6 +10,7 @@
 /public/bundles/
 /var/
 /vendor/
+bin/.*
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
