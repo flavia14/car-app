@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Manager;
 
+use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 /**
@@ -18,15 +20,11 @@ abstract class AbstractManager
      * If we call the manager with an unexisting method, we will try to get the main
      * service of the manager and if there is a method with that name callable, call it.
      *
-     * @return mixed
-     *
-     * @throws \ReflectionException
-     * @throws InvalidParameterException
      */
     public function __call(string $methodName, array $arguments)
     {
         // we create a reflection class so we can get the unqualified short name of the class
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
 
         // lower case first character and then replace Manager to Service to get
         // the main service's name. Ex: CorePartnerManager -> corePartnerService

@@ -10,9 +10,8 @@ class LikeManager extends AbstractManager
 {
     protected LikeService $likeService;
 
-    public function __construct(
-        LikeService $likeService
-    ) {
+    public function __construct(LikeService $likeService)
+    {
         $this->likeService = $likeService;
     }
 }

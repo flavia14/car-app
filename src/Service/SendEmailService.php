@@ -14,9 +14,8 @@ use Symfony\Component\Mime\Address;
 class SendEmailService
 {
     private EmailVerifier $emailVerifier;
-    public function __construct(
-        EmailVerifier $emailVerifier
-    ) {
+    public function __construct(EmailVerifier $emailVerifier)
+    {
         $this->emailVerifier = $emailVerifier;
     }
 
@@ -26,8 +25,8 @@ class SendEmailService
             throw new EntityNotFoundException("Entity not found");
         }
 
-        $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-            (new TemplatedEmail())
+        $this->emailVerifier->sendEmailConfirmation('app_verify_email',
+            $user, (new TemplatedEmail())
                 ->from(new Address('flavia.andron@gmail.com', 'Flavia Andron'))
                 ->to($user->getEmail())
                 ->subject('Please Confirm your Email')

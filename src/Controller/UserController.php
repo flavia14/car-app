@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,19 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/user', name: 'user')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(UserRepository $user): Response
     {
-        return $this->render('user/profile.html.twig', [
-            'user' => $user->findAll()
-        ]);
+        return $this->render('user/profile.html.twig', ['user' => $user->findAll()]);
     }
 
     #[Route('/user/{user}', name: 'showOne')]
     public function showOne(User $user): Response
     {
-        return $this->render('user/showOne.html.twig', [
-            'user' => $user
-        ]);
+        return $this->render('user/showOne.html.twig', ['user' => $user]);
     }
 
     #[Route('/user/add', name: 'user_add', priority: 2)]
@@ -42,12 +42,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user');
         }
-        return $this->renderForm(
-            'user/createUser.html.twig',
-            [
-                'form' => $form
-            ]
-        );
+        return $this->renderForm('user/createUser.html.twig', ['form' => $form]);
     }
 
     #[Route('/user/update/{id}', name: 'user-update')]
@@ -64,11 +59,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user');
         }
-        return $this->renderForm(
-            'user/createUser.html.twig',
-            [
-                'form' => $form
-            ]
-        );
+
+        return $this->renderForm('user/createUser.html.twig', ['form' => $form]);
     }
 }
