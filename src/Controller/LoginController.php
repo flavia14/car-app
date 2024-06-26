@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Manager\UserManager;
+use Exception;
+use PDOException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,18 +24,31 @@ class LoginController extends AbstractController
     }
 
     #[Route('/login', name: self::APP_LOGIN)]
-    public function login(
-        AuthenticationUtils $utils
-    ): Response
+    public function login(AuthenticationUtils $utils): Response
     {
-
-        return $this->render('login/index.html.twig',
-            $this->userManager->getLastUsername($utils)
-        );
+        try {
+            return $this->render('login/index.html.twig',
+                $this->userManager->getLastUsername($utils)
+            );
+        } catch (PDOException $e) {
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login. Please try again later.',
+                    'path' => "app_login"
+                ]
+            );
+        } catch (Exception $e) {
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login.',
+                    'path' => "app_login"
+                ]
+            );
+        }
     }
 
     #[Route('/logout', name: self::APP_LOGOUT)]
-    public function logout()
+    public function logout(): void
     {
     }
 }

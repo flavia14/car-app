@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Entity\MicroPost;
 use App\Entity\User;
-use App\Repository\MicroPostRepository;
+use App\Manager\LikeManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,26 +15,33 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LikeController extends AbstractController
 {
+    private LikeManager $likeManager;
+
+    public function __construct(LikeManager $likeManager)
+    {
+        $this->likeManager = $likeManager;
+    }
+
     #[Route('/like/{id}', name: 'app_like')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function like(MicroPost $microPost, MicroPostRepository $postRepository, Request $request): Response
+    public function like(MicroPost $microPost, Request $request): Response
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
-        $microPost->addLikedBy($currentUser);
-        $postRepository->save($microPost, true);
+        $this->likeManager->addLike($microPost, $currentUser);
 
         return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/unlike/{id}', name: 'app_unlike')]
-    public function unlike(MicroPost $microPost, MicroPostRepository $postRepository, Request $request): Response
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function unlike(MicroPost $microPost, Request $request): Response
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
-        $microPost->removeLikedBy($currentUser);
-        $postRepository->save($microPost, true);
+        $this->likeManager->removeLike($microPost, $currentUser);
 
         return $this->redirect($request->headers->get('referer'));
     }
 }
+

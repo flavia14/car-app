@@ -4,9 +4,6 @@
 
 {% block body %}
     {{ form_start(form) }}
-    {{ include ('profile/formProfile.html.twig') }}
-    <input type="hidden" name="_target_path" value="/posts">
-    <button type="submit">Create</button>
-    <button><a href="{{ path('profile_image') }}"> Profile image</a></button>
+    {{ include('profile/formProfile.html.twig') }}
     {{ form_end(form) }}
 {% endblock %}

@@ -1,92 +1,91 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\MicroPost;
 use App\Entity\User;
-use App\Form\MicroPostType;
-use App\Repository\MicroPostRepository;
+use App\Manager\MicroPostManager;
+use App\Transformer\MicroPostTransformer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-class MicroPostController extends AbstractController
+class MicroPostController extends BaseController
 {
+    private MicroPostManager $microPostManager;
+    private MicroPostTransformer $microPostTransformer;
+
+    public function __construct(MicroPostManager $microPostManager, MicroPostTransformer $microPostTransformer)
+    {
+        $this->microPostManager = $microPostManager;
+        $this->microPostTransformer = $microPostTransformer;
+    }
+
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/posts', name: 'posts')]
-    public function getListOfPost(MicroPostRepository $microPostRepository): Response
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function getListOfPost(): Response
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
-        $posts = $microPostRepository->findAllByAuthors($currentUser->getFollows());
-        return $this->render('post/index.html.twig', [
-            'posts' => $posts
-        ]);
+        $posts = $this->microPostManager->getListOfPosts($currentUser);
+
+        return $this->render('post/index.html.twig', ['posts' => $posts]);
     }
 
     #[Route('/post/top-liked', name: 'app_top_liked')]
-    public function topLiked(MicroPostRepository $postRepository): Response
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function topLiked(): Response
     {
-        $posts= $postRepository->findAllWithMinLikes(2);
-        return $this->render(
-            'post/topLiked.html.twig',
-            [
-                'posts' => $posts,
-            ]
-        );
+        $posts = $this->microPostManager->getTopLikedPost();
+
+        return $this->render('post/topLiked.html.twig', ['posts' => $posts]);
     }
 
-    #[Route('/post/add', name: 'post_add', priority: 2)]
+    #[Route('/post/add/{idProfile}', name: 'post-add-save', methods: 'POST', priority: 2)]
     #[IsGranted('ROLE_WRITER')]
-    public function add(Request $request, MicroPostRepository $postRepository): Response
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function addMicroPost(Request $request): Response
     {
-        $post = new MicroPost();
-        $user = $this->getUser();
-        $post->setAuthor($user);
-        $form = $this->createForm(MicroPostType::class, $post);
+        $requestArray = $this->getRequestParameters($request);
+        $requestDto = $this->microPostTransformer->convertRequestToDto($requestArray);
 
-        $form->handleRequest($request);
+        $this->microPostManager->createMicroPost($this->getUser(), $requestDto);
+        $this->addFlash('success', 'New post have been added');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $microPost = $form->getData();
-            $postRepository->save($microPost, true);
-
-            $this->addFlash('success', 'New post have been added');
-
-            return $this->redirectToRoute('posts');
-        }
-        return $this->renderForm(
-            'post/createPost.html.twig',
-            [
-                'form' => $form
-            ]
-        );
+        return $this->redirectToRoute('posts');
     }
 
-    #[Route('/post/update/{id}', name: 'post-update')]
-    #[IsGranted(MicroPost::EDIT, 'microPost')]
-    public function updatePost(MicroPost $microPost, Request $request, MicroPostRepository $postRepository): Response
+    #[Route('/post/add', name: 'post-add', methods: 'GET', priority: 2)]
+    #[IsGranted('ROLE_WRITER')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function addMicroPostRender(): Response
     {
-        $form = $this->createForm(MicroPostType::class, $microPost);
+        return $this->render('post/createPost.html.twig');
+    }
 
-        $form->handleRequest($request);
+    #[Route('/post/update/{id}', name: 'post-update', methods: 'GET')]
+    #[IsGranted(MicroPost::EDIT, 'microPost')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function updateMicroPostRender(MicroPost $microPost): Response
+    {
+        return $this->render('post/updatePost.html.twig', ['id' => $microPost->getId()]);
+    }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $microPost = $form->getData();
-            $postRepository->save($microPost, true);
+    #[Route('/post/update/{id}', name: 'post-update-save', methods: 'POST')]
+    #[IsGranted(MicroPost::EDIT, 'microPost')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function updateMicroPost(Request $request, MicroPost $microPost): Response
+    {
+        $requestArray = $this->getRequestParameters($request);
+        $requestDto = $this->microPostTransformer->convertRequestToDto($requestArray);
 
-            $this->addFlash('success', 'New post have been update');
+        $this->microPostManager->updateMicroPost($microPost, $requestDto);
+        $this->addFlash('success', 'New post have been added');
 
-            return $this->redirectToRoute('posts');
-        }
-        return $this->renderForm(
-            'post/updatePost.html.twig',
-            [
-                'form' => $form
-            ]
-        );
+        return $this->redirectToRoute('posts');
     }
 }

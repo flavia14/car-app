@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Manager\UserManager;
 use App\Security\EmailVerifier;
 use App\Transformer\UserTransformer;
+use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,9 +34,7 @@ class RegistrationController extends BaseController
     #[Route('/register', name: 'app-register')]
     public function register(): Response
     {
-        return $this->render(
-            'registration/register.html.twig'
-        );
+        return $this->render('registration/register.html.twig');
     }
 
     #[Route('/register/save', name: 'app-register-save')]
@@ -43,11 +42,25 @@ class RegistrationController extends BaseController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher
     ): Response {
-        $requestArray = $this->getRequestParameters($request);
-        $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);
-        $this->userManager->register($requestDto, $userPasswordHasher);
 
-        return $this->redirectToRoute('posts');
+        try {
+            $requestArray = $this->getRequestParameters($request);
+            $requestDto = $this->userTransformer->convertRegisterRequestToDto($requestArray);
+
+            $this->userManager->register($requestDto, $userPasswordHasher);
+
+            return $this->redirectToRoute('posts');
+        } catch (\PDOException $e) {
+            return $this->render('error.html.twig', [
+                'message' => 'An error occurred during registration. Please try again later.',
+                'path' => "app-register"
+            ]);
+        } catch (\Exception $e) {
+            return $this->render('error.html.twig', [
+                'message' => 'An error occurred during registration.',
+                'path' => "app-register"
+            ]);
+        }
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
@@ -55,17 +68,7 @@ class RegistrationController extends BaseController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // validate email confirmation link, sets User::isVerified=true and persists
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $exception->getReason());
-
-            return $this->redirectToRoute('app_register');
-        }
-
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
 
         return $this->redirectToRoute('app_register');
     }

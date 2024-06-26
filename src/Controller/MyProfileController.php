@@ -1,26 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\MicroPostRepository;
+use App\Manager\MicroPostManager;
+use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Exception\ErrorMappingException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MyProfileController extends AbstractController
 {
-    #[Route('/myProfile/{id}', name: 'app_my_profile')]
-    public function  show(
-        User $user,
-        MicroPostRepository $posts
-    ): Response
+    private MicroPostManager $microPostManager;
+
+    public function __construct(MicroPostManager $microPostManager)
     {
-        return $this->render('my_profile/show.html.twig', [
-            'user' => $user,
-            'posts' => $posts->findAllByAuthor(
-                $user
-            )
-        ]);
+        $this->microPostManager = $microPostManager;
+    }
+
+    #[Route('/myProfile/{id}', name: 'app_my_profile')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function showMyProfile(User $user): Response
+    {
+        try {
+            $posts = $this->microPostManager->getAllPostsByAuthor($user->getId());
+        } catch (Exception $e) {
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login. Please try again later.',
+                    'path' => "app_login"
+                ]
+            );
+        } catch (ErrorMappingException $e) {
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login.',
+                    'path' => "app_login"
+                ]
+            );
+        }
+
+        return $this->render('my_profile/show.html.twig', ['user' => $user, 'posts' => $posts]);
     }
 }

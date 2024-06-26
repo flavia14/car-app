@@ -17,7 +17,7 @@ class UserManager extends AbstractManager
     public function __construct(
         UserService $userService,
         SendEmailService $sendEmailService
-    ){
+    ) {
         $this->userService = $userService;
         $this->sendEmailService = $sendEmailService;
     }
