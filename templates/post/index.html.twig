@@ -3,11 +3,14 @@
     <center>
         {% for post in posts %}
         <hr style="border-top: 5px solid black;">
+        <button style="background-color: chartreuse"><a href="{{ path('app_my_profile',  {id: post.author.id} ) }}"> Profile for {{ post.author.username }}</a></button>
+
         <br>
         <div>
             POST {{ post.title }}
             <br>
-            <button><a href="{{ path('post-update', {id: post.id} ) }}"> Edit</a></button>
+            <button style="background-color: darkseagreen"><a href="{{ path('post-update', {id: post.id} ) }}"> Edit</a>
+            </button>
             <br>
             <b style="color: #5eb5e0">
                 TITLE:
@@ -19,10 +22,23 @@
                 {{ post.text }}
             </b>
             <br>
-            <button><a href="{{ path('add-comment', {id: post.id} ) }}"> Add comment</a></button>
-            <button><a href="{{ path('comments', {id: post.id} ) }}"> View comments</a></button>
-            <br>
-            {% endfor %}
-            <hr style="border-top: 5px solid black;">
+            {% if post.likedBy.contains(app.user) %}
+            <a href="{{ path('app_unlike', {id: post.id}) }}">
+                unlike <span> {{ post.likedBy.count }}</span>
+                {% else %}
+                <a href="{{ path('app_like', {id: post.id}) }}">
+                    like <span> {{ post.likedBy.count }}</span>
+                    {% endif %}
+                </a>
+                <br>
+                <button style="background-color: #AAAAAA"><a href="{{ path('add-comment', {id: post.id} ) }}"> Add
+                        comment</a></button>
+                <button style="background-color: bisque"><a href="{{ path('comments', {id: post.id} ) }}"> View
+                        comments</a></button>
+                <br>
+                <br>
+                {% endfor %}
+
+                <hr style="border-top: 5px solid black;">
     </center>
 {% endblock %}

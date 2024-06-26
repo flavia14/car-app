@@ -11,6 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MicroPostRepository::class)]
 class MicroPost
 {
+    public const EDIT = 'POST_EDIT';
+    public const VIEW = 'POST_VIEW';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -28,9 +31,17 @@ class MicroPost
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
+    #[ORM\ManyToOne(inversedBy: 'microPost')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'isLike')]
+    private Collection $likedBy;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->likedBy = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +111,42 @@ class MicroPost
                 $comment->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getLikedBy(): Collection
+    {
+        return $this->likedBy;
+    }
+
+    public function addLikedBy(User $likedBy): self
+    {
+        if (!$this->likedBy->contains($likedBy)) {
+            $this->likedBy->add($likedBy);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedBy(User $likedBy): self
+    {
+        $this->likedBy->removeElement($likedBy);
 
         return $this;
     }

@@ -39,6 +39,9 @@ class UserProfile
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
 
+    #[ORM\Column(length: 1024, nullable: true)]
+    private ?string $image = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +139,18 @@ class UserProfile
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

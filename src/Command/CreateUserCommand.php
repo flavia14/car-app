@@ -29,6 +29,7 @@ class CreateUserCommand extends Command
     {
         $this
             ->addArgument('username', InputArgument::REQUIRED, 'username')
+            ->addArgument('email', InputArgument::REQUIRED, 'email')
             ->addArgument('password', InputArgument::REQUIRED, 'password')
         ;
     }
@@ -37,10 +38,12 @@ class CreateUserCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $username = $input->getArgument('username');
+        $email = $input->getArgument('email');
         $password = $input->getArgument('password');
 
         $user = new User();
         $user->setUsername($username)
+            ->setEmail($email)
             ->setPassword(
                 $this->userPasswordHasher->hashPassword(
                     $user,

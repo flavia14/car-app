@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile Image{% endblock %}
+
+{% block bread %}
+    → Profile Image
+{% endblock %}
+
+{% block body %}
+
+    <div class="flex items-center">
+{#        {{ include('shared/_avatar.html.twig', {'size': 32, profile: app.user.userProfile}) }}#}
+
+        <div class="ml-16">
+            {{ form_start(form) }}
+
+            {{ form_label(form.profileImage) }}
+            <br>
+            {{ form_widget(form.profileImage) }}
+            <br>
+            {{ form_errors(form.profileImage) }}
+        </div>
+    </div>
+
+
+    <div>
+        <button type="submit">Save Changes</button>
+        <button><a href="{{ path('profile' ) }}"> Back</a></button>
+
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}

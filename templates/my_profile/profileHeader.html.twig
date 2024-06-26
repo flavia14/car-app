@@ -1,0 +1,16 @@
+<div class="flex items-center">
+    <div>
+        <div>{{ user.userProfile.name ?? user.email }}</div>
+        <div>{{ user.email }}</div>
+
+        {% if user.userProfile != null %}
+            <div>
+                {{ user.userProfile.bio ?? 'No bio' }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="ml-16 text-2xl">
+        {{ include('my_profile/followButton.html.twig', { userToFollow: user }) }}
+    </div>
+    <button style="background-color: gold"><a href="{{ path('app_top_liked' ) }}"> Top liked posts
+</div>
