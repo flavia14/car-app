@@ -34,9 +34,7 @@ class RegistrationController extends BaseController
     #[Route('/register', name: 'app-register')]
     public function register(): Response
     {
-        return $this->render(
-            'registration/register.html.twig'
-        );
+        return $this->render('registration/register.html.twig');
     }
 
     #[Route('/register/save', name: 'app-register-save')]

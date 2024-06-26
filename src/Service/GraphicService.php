@@ -11,6 +11,8 @@ class GraphicService
 {
     private sensorRepository $sensorRepository;
     private SensorsTransformer $sensorsTransformer;
+    private const FRONT = "front";
+    private const BACK = "back";
 
     public function __construct(SensorRepository $sensorRepository, SensorsTransformer $sensorsTransformer)
     {
@@ -18,14 +20,16 @@ class GraphicService
         $this->sensorsTransformer = $sensorsTransformer;
     }
 
-    public function getDataSensorsFront(string $name)
+    public function getDataSensorsFront(string $name): array
     {
-        $sensors = $this->sensorRepository->getDataSensors('front', $name);
+        $sensors = $this->sensorRepository->getDataSensors(self::FRONT, $name);
+
          return $this->sensorsTransformer->convertSensorsToDto($sensors);
     }
-    public function getDataSensorsBack(string $name)
+    public function getDataSensorsBack(string $name): array
     {
-        $sensors = $this->sensorRepository->getDataSensors('back', $name);
+        $sensors = $this->sensorRepository->getDataSensors(self::BACK, $name);
+
         return $this->sensorsTransformer->convertSensorsToDto($sensors);
     }
 }

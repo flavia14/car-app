@@ -8,7 +8,6 @@ use App\Dto\Request\MicroPostRequestDto;
 use App\Entity\MicroPost;
 use App\Entity\User;
 use App\Enum\BaseEnum;
-use App\Manager\MicroPostManager;
 use App\Repository\MicroPostRepository;
 
 class MicroPostService

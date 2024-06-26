@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -71,7 +73,7 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'profile')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function profile(
-        Request        $request,
+        Request $request,
         UserRepository $users
     ): Response
     {
@@ -99,11 +101,6 @@ class ProfileController extends AbstractController
             );
         }
 
-        return $this->render(
-            'profile/profile.html.twig',
-            [
-                'form' => $form->createView(),
-            ]
-        );
+        return $this->render('profile/profile.html.twig', ['form' => $form->createView()]);
     }
 }

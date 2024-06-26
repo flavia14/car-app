@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Exception\CanNotFollowCurrentUserException;
 use App\Manager\MicroPostManager;
 use Exception;
-use PDOException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Exception\ErrorMappingException;
@@ -29,10 +29,21 @@ class MyProfileController extends AbstractController
         try {
             $posts = $this->microPostManager->getAllPostsByAuthor($user->getId());
         } catch (Exception $e) {
-            return $this->render('error.html.twig', ['message' => 'An error occurred during login. Please try again later.', 'path' => "app_login"]);
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login. Please try again later.',
+                    'path' => "app_login"
+                ]
+            );
         } catch (ErrorMappingException $e) {
-            return $this->render('error.html.twig', ['message' => 'An error occurred during login.', 'path' => "app_login"]);
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login.',
+                    'path' => "app_login"
+                ]
+            );
         }
+
         return $this->render('my_profile/show.html.twig', ['user' => $user, 'posts' => $posts]);
     }
 }

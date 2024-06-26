@@ -18,10 +18,7 @@ class CommentController extends BaseController
     private CommentManager $commentManager;
     private CommentTransformer $commentTransformer;
 
-    public function __construct(
-        CommentManager        $commentManager,
-        CommentTransformer    $commentTransformer
-    )
+    public function __construct(CommentManager $commentManager, CommentTransformer $commentTransformer)
     {
         $this->commentManager = $commentManager;
         $this->commentTransformer = $commentTransformer;
@@ -33,9 +30,7 @@ class CommentController extends BaseController
     {
         $comments = $this->commentManager->getListOfComments($microPost->getId());
 
-        return $this->render('comment/index.html.twig', [
-            'comments' => $comments,
-        ]);
+        return $this->render('comment/index.html.twig', ['comments' => $comments]);
     }
 
     #[Route('comment/add/{id}', name: 'add-comment', methods: 'GET')]
@@ -43,12 +38,7 @@ class CommentController extends BaseController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function addComment(MicroPost $microPost): Response
     {
-        return $this->render(
-            'comment/comment.html.twig',
-            [
-                'id' => $microPost->getId()
-            ]
-        );
+        return $this->render('comment/comment.html.twig', ['id' => $microPost->getId()]);
     }
 
     #[Route('comment/add/{id}', name: 'add-comment-save', methods: 'POST')]

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\MicroPost;
@@ -11,16 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class MicroPostController extends BaseController
 {
     private MicroPostManager $microPostManager;
     private MicroPostTransformer $microPostTransformer;
 
-    public function __construct(
-        MicroPostManager     $microPostManager,
-        MicroPostTransformer $microPostTransformer
-    )
+    public function __construct(MicroPostManager $microPostManager, MicroPostTransformer $microPostTransformer)
     {
         $this->microPostManager = $microPostManager;
         $this->microPostTransformer = $microPostTransformer;
@@ -35,9 +33,7 @@ class MicroPostController extends BaseController
         $currentUser = $this->getUser();
         $posts = $this->microPostManager->getListOfPosts($currentUser);
 
-        return $this->render('post/index.html.twig', [
-            'posts' => $posts
-        ]);
+        return $this->render('post/index.html.twig', ['posts' => $posts]);
     }
 
     #[Route('/post/top-liked', name: 'app_top_liked')]
@@ -46,12 +42,7 @@ class MicroPostController extends BaseController
     {
         $posts = $this->microPostManager->getTopLikedPost();
 
-        return $this->render(
-            'post/topLiked.html.twig',
-            [
-                'posts' => $posts,
-            ]
-        );
+        return $this->render('post/topLiked.html.twig', ['posts' => $posts]);
     }
 
     #[Route('/post/add/{idProfile}', name: 'post-add-save', methods: 'POST', priority: 2)]
@@ -73,9 +64,7 @@ class MicroPostController extends BaseController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function addMicroPostRender(): Response
     {
-        return $this->render(
-            'post/createPost.html.twig'
-        );
+        return $this->render('post/createPost.html.twig');
     }
 
     #[Route('/post/update/{id}', name: 'post-update', methods: 'GET')]
@@ -83,12 +72,7 @@ class MicroPostController extends BaseController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function updateMicroPostRender(MicroPost $microPost): Response
     {
-        return $this->render(
-            'post/updatePost.html.twig',
-            [
-                'id' => $microPost->getId()
-            ]
-        );
+        return $this->render('post/updatePost.html.twig', ['id' => $microPost->getId()]);
     }
 
     #[Route('/post/update/{id}', name: 'post-update-save', methods: 'POST')]

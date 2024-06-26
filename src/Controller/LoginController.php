@@ -27,11 +27,23 @@ class LoginController extends AbstractController
     public function login(AuthenticationUtils $utils): Response
     {
         try {
-            return $this->render('login/index.html.twig', $this->userManager->getLastUsername($utils));
+            return $this->render('login/index.html.twig',
+                $this->userManager->getLastUsername($utils)
+            );
         } catch (PDOException $e) {
-            return $this->render('error.html.twig', ['message' => 'An error occurred during login. Please try again later.',  'path' => "app_login"]);
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login. Please try again later.',
+                    'path' => "app_login"
+                ]
+            );
         } catch (Exception $e) {
-            return $this->render('error.html.twig', ['message' => 'An error occurred during login.', 'path' => "app_login"]);
+            return $this->render('error.html.twig',
+                [
+                    'message' => 'An error occurred during login.',
+                    'path' => "app_login"
+                ]
+            );
         }
     }
 

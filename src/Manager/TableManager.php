@@ -9,13 +9,12 @@ class TableManager extends AbstractManager
 {
     protected TableService $tableService;
 
-    public function __construct(
-        TableService $tableService
-    ) {
+    public function __construct(TableService $tableService)
+    {
         $this->tableService = $tableService;
     }
 
-    public function get(){
-
+    public function get()
+    {
     }
 }

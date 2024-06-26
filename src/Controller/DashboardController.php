@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Repository\ActuatorRepository;
@@ -17,7 +19,6 @@ class DashboardController extends AbstractController
      */
     public function dashboard(EntityManagerInterface $entityManager)
     {
-        // Obțineți starea curentă a LED-ului din baza de date
         $ledOn = $entityManager->getRepository(Actuator::class)->findOneBy(['name' => 'LED']);
 
         return $this->render('dashboard/dashboard.html.twig', [
@@ -32,7 +33,6 @@ class DashboardController extends AbstractController
     {
         $ledOn = $request->request->get('ledOn');
 
-        // Actualizați starea LED-ului în baza de date
         $actuator = $entityManager->getRepository(Actuator::class)->findOneBy(['name' => 'LED']);
         $actuator->setValue($ledOn);
         $entityManager->flush();
@@ -40,18 +40,18 @@ class DashboardController extends AbstractController
         return $this->json(['success' => true]);
     }
 
-    #[Route('/update-led-state/{timestamp}', name: 'update_led_state')]
+    /**
+     * @Route("/update-led-state/{timestamp}", name="update_led_state", methods={"GET"})
+     */
     public function updateLEDStateAction($timestamp, ActuatorRepository $actuatorRepository): Response
     {
-        // Obțineți entitatea Actuator și actualizați starea LED-ului în funcție de timestamp
         $actuator = $actuatorRepository->findOneBy(['timestamp' => $timestamp]);
         if ($actuator) {
             $actuator->setValue(true);
             $actuatorRepository->save($actuator, true);
-            return new Response('Starea LED-ului a fost actualizată.');
+            return new Response('LED status has been updated.');
         } else {
-            return new Response('Eroare: Nu s-a găsit LED-ul asociat timestamp-ului furnizat.');
+            return new Response('Error: LED associated with the provided timestamp was not found.');
         }
     }
 }
-

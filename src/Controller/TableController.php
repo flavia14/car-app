@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Dto\RequestDtoSensor;
@@ -14,6 +16,7 @@ class TableController extends BaseController
 {
 
     private TableManager $tableManager;
+    private const LIMIT = 12;
 
     public function __construct(TableManager $tableManager)
     {
@@ -30,19 +33,20 @@ class TableController extends BaseController
             (int)$request->query->get('page', 1),
         );
 
-        $limit = 12;
+        $limit = self::LIMIT;
         $numberOfPages = $this->tableManager->getNumberOfPagesFront( $limit);
         $sensors = $this->tableManager->getFrontSensors($limit, $requestDto);
 
         return $this->render('tabel/tabel.html.twig',
-            ["title" => 'Front Sensors',
+            [
+                "title" => 'Front Sensors',
                 'path' => 'graphic-front',
                 "sensors" => $sensors,
                 "numPages" =>$numberOfPages,
                 'currentPage' => $request->query->get('page', 1),
                 'sort' => $request->query->get('sort', 'name'),
                 'order' => $request->query->get('order', 'desc')
-                ],
+            ],
         );
     }
 
@@ -50,14 +54,13 @@ class TableController extends BaseController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function getBackSensorsTable(Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        $user = $this->getUser();
         $requestDto = new RequestDtoSensor(
             $request->query->get('sort', 'name'),
             $request->query->get('order', 'asc'),
             (int)$request->query->get('page', 1),
         );
 
-        $limit = 12;
+        $limit = self::LIMIT;
         $numberOfPages = $this->tableManager->getNumberOfPagesBack( $limit);
         $sensors = $this->tableManager->getBackSensors($limit, $requestDto);
 

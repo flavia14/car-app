@@ -35,15 +35,11 @@ class TableService
 
     public function getNumberOfPagesFront( int $limit): int
     {
-        $numberOfPages = intdiv(count($this->sensorRepository->getAllSensors("front")), $limit) + 1;
-
-        return $numberOfPages;
+        return intdiv(count($this->sensorRepository->getAllSensors("front")), $limit) + 1;
     }
 
     public function getNumberOfPagesBack( int $limit): int
     {
-        $numberOfPages = intdiv(count($this->sensorRepository->getAllSensors("back")), $limit) + 1;
-
-        return $numberOfPages;
+        return intdiv(count($this->sensorRepository->getAllSensors("back")), $limit) + 1;
     }
 }

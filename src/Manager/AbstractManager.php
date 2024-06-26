@@ -20,10 +20,6 @@ abstract class AbstractManager
      * If we call the manager with an unexisting method, we will try to get the main
      * service of the manager and if there is a method with that name callable, call it.
      *
-     * @return mixed
-     *
-     * @throws ReflectionException
-     * @throws InvalidParameterException
      */
     public function __call(string $methodName, array $arguments)
     {
